@@ -1,0 +1,24 @@
+#-----------------------------------------------------------------------
+#  Set Compiler and Commands
+#-----------------------------------------------------------------------
+CC=gcc -c
+CXX=g++ -c
+LINK=g++
+RM=rm -f
+
+
+SRCS=$(wildcard *.cpp)
+OBJS = $(patsubst %,$(OBJDIR)/%,$(subst .cpp,.o,$(SRCS)))
+
+#-----------------------------------------------------------------------
+#  For Boost
+#-----------------------------------------------------------------------
+LIBPATH=/usr/local/lib
+LIBS="boost_unit_test_framework"
+
+#-----------------------------------------------------------------------
+#  Compiler and Linker Flags
+#-----------------------------------------------------------------------
+CPPFLAGS=-g -c -std=c++17 -Wall -Wextra -DBOOST_TEST_DYN_LINK -I . -o 
+LDFLAGS=-g -m64 -L$(LIBPATH) -l$(LIBS) -o "$(OBJDIR)/$(MODULE)"
+COMPILE_MAKEDEPEND=-MD -MP

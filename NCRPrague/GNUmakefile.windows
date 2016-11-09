@@ -1,0 +1,31 @@
+#-----------------------------------------------------------------------
+# Macros and Generic Variables
+#-----------------------------------------------------------------------
+ESCP=$(strip $(subst \,\\,$(subst /,\,$(1))))
+BITNESS?=x86
+
+#-----------------------------------------------------------------------
+#  Set Compiler and Commands
+#-----------------------------------------------------------------------
+CC=cl /c
+CXX=cl /c
+LINK=cl
+RM=rm -f
+
+#-----------------------------------------------------------------------
+#  For Boost
+#-----------------------------------------------------------------------
+ifndef BOOST_ROOT
+$(error BOOST_ROOT is not set)
+endif
+BOOSTROOT=$(call ESCP, $(BOOST_ROOT))
+INCPATH=$(BOOSTROOT)
+LIBPATH=$(call ESCP, $(BOOSTROOT)\stage\lib)
+LIBS="libboost_unit_test_framework-vc140-mt-gd-1_60.lib"
+
+#-----------------------------------------------------------------------
+#  Compiler and Linker Flags
+#-----------------------------------------------------------------------
+COMPILE_MAKEDEPEND=/md
+CPPFLAGS=/c /GS /W3 /Od /sdl /Fd"$(OBJDIR)\vc140.pdb" /D "WIN32" /D "_DEBUG" /RTC1 /MDd /EHsc /nologo -I $(INCPATH) /Fo
+LDFLAGS=/link /OUT:"$(OBJDIR)/$(MODULE).exe" /PDB:"$(OBJDIR)/$(MODULE).pdb" /DYNAMICBASE /MACHINE:$(BITNESS) /SUBSYSTEM:CONSOLE /nologo /LIBPATH:$(LIBPATH) $(LIBS)
